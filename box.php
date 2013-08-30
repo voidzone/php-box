@@ -2,9 +2,11 @@
 /*
 Name: PHP Box
 Author: Tim Milligan
-Version: 2.1
+Version: 2.1.1
 Description: An extension of the Thesis Text Box that supports PHP code.
 Class: vzm_php_box
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 class vzm_php_box extends thesis_box {
@@ -28,6 +30,16 @@ class vzm_php_box extends thesis_box {
 				'convert_chars' => false,
 				'do_shortcode' => false);
 		$thesis->wp->filter($this->_id, $filters);
+		
+		global $vzm_ah;
+		if(is_admin()) {
+			if(!isset($vzm_ah)) { // Check if the Asset Handler has already been created once, no point in creating the same asset handler multiple times.
+				if(!class_exists('vzm_asset_handler')) // Load the asset handler class if it hasn't been already.
+					require_once( dirname(__FILE__) . '/vzm_asset_handler.php');
+					
+				$vzm_ah = new vzm_asset_handler;
+			}
+		}
 	}
 
 	protected function html_options() {
